@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera Feed</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.2/socket.io.js" integrity="sha512-jMNwWSmjje4fjYut9MBGKXw5FZA6D67NHAuC9szpjbbjg51KefquNfvn4DalCbGfkcv/jHsHnPo1o47+8u4biA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('/Users/shhan/temp/Face-Emotion-Recognition-Package/flask_opencv/static/lib/dist/', filename='socket.io.js') }}"></script>
+    <script type="text/javascript">
+      var socket = io();
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            var socket = io();
+
+            socket.on("connect", function() {
+                console.log("Socket connected.");
+            });
+
+            socket.on("emotion_stats_update", function(emotionStats) {
+                var happyCount = emotionStats["Happy"];
+                var sadCount = emotionStats["Sad"];
+                var angryCount = emotionStats["Angry"];
+                var surpriseCount = emotionStats["Surprise"];
+                var neutralCount = emotionStats["Neutral"];
+
+                // Update the emotion statistics counts
+                $("#angry-count").text(angryCount);
+                $("#happy-count").text(happyCount);
+                $("#sad-count").text(sadCount);
+                $("#surprise-count").text(surpriseCount);
+                $("#neutral-count").text(neutralCount);
+
+                // Update emoticon images based on conditions
+                if (happyCount >= 5) {
+                    $("#happy-emoticon").attr("src", "static/emojis/happy_active.png");
+                } else {
+                    $("#happy-emoticon").attr("src", "static/emojis/happy.png");
+                }
+                if (sadCount >= 5) {
+                    $("#sad-emoticon").attr("src", "static/emojis/sad_active.png");
+                } else {
+                    $("#sad-emoticon").attr("src", "static/emojis/sad.png");
+                }
+                if (angryCount >= 5) {
+                    $("#angry-emoticon").attr("src", "static/emojis/angry_active.png");
+                } else {
+                    $("#angry-emoticon").attr("src", "static/emojis/angry.png");
+                }
+                if (surpriseCount >= 5) {
+                    $("#surprise-emoticon").attr("src", "static/emojis/surprised_active.png");
+                } else {
+                    $("#surprise-emoticon").attr("src", "static/emojis/surprised.png");
+                }
+                if (neutralCount >= 5) {
+                    $("#neutral-emoticon").attr("src", "static/emojis/neutral_active.png");
+                } else {
+                    $("#neutral-emoticon").attr("src", "static/emojis/neutral.png");
+                }
+            });
+        });
+    </script>
+    <style>
+        .emoticon-image {
+            width: 50px;
+            height: 50px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Camera Feed</h1>
+    <img src="{{ url_for('video_feed') }}">
+    <h2>Emotion Statistics:</h2>
+    <p>Angry: <span id="angry-count"></span></p>
+    <p>Happy: <span id="happy-count"></span></p>
+    <p>Sad: <span id="sad-count"></span></p>
+    <p>Surprise: <span id="surprise-count"></span></p>
+    <p>Neutral: <span id="neutral-count"></span></p>
+    <h2>Emoticon:</h2>
+    <div id="emoticon-container">
+        <img src="static/emojis/happy.png" class="emoticon-image" id="happy-emoticon">
+        <img src="static/emojis/sad.png" class="emoticon-image" id="sad-emoticon">
+        <img src="static/emojis/angry.png" class="emoticon-image" id="angry-emoticon">
+        <img src="static/emojis/surprised.png" class="emoticon-image" id="surprise-emoticon">
+        <img src="static/emojis/neutral.png" class="emoticon-image" id="neutral-emoticon">
+    </div>
+</body>
+</html>

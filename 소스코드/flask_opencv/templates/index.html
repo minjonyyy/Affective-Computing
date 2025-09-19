@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera Feed</title>
+</head>
+<body>
+    <h1>Camera Feed</h1>
+    <img src="{{ url_for('video_feed') }}">
+    <h2>Emotion Statistics:</h2>
+    <p>Angry: {{ emotion_stats['Angry'] }}</p>
+    <p>Happy: {{ emotion_stats['Happy'] }}</p>
+    <p>Sad: {{ emotion_stats['Sad'] }}</p>
+    <p>Surprise: {{ emotion_stats['Surprise'] }}</p>
+    <p>Neutral: {{ emotion_stats['Neutral'] }}</p>
+</body>
+</html>
